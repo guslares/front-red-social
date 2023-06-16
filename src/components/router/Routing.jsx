@@ -5,38 +5,40 @@ import { Login } from '../layout/user/Login'
 import { Register } from '../layout/user/Register'
 import { PrivateLayout } from '../layout/private/PrivateLayout'
 import { Feed } from '../layout/publication/Feed'
+import { AuthProvider } from '../context/AuthProvider'
 
 
 export const Routing = () => {
     return (
         <BrowserRouter>
-            <Routes>
-                <Route path="/" element={<PublicLayout />}>
-                    <Route index element={<Login />} />
-                    <Route path="login" element={<Login />} />
-                    <Route path="registro" element={<Register />} />
+            <AuthProvider>
+                <Routes>
+                    <Route path="/" element={<PublicLayout />}>
+                        <Route index element={<Login />} />
+                        <Route path="login" element={<Login />} />
+                        <Route path="registro" element={<Register />} />
 
 
-                </Route>
-                <Route path='/social' element={<PrivateLayout />}>
-                    <Route index element={<Feed />} />
-                    <Route path="feed" element={<Feed />} />
+                    </Route>
+                    <Route path='/social' element={<PrivateLayout />}>
+                        <Route index element={<Feed />} />
+                        <Route path="feed" element={<Feed />} />
 
-                </Route>
+                    </Route>
 
-                <Route path="*" element={
-                    <><p>
-                        <h1>Error 404</h1>
-                        <Link to="/">Volver al inicio</Link>
-                    </p> 
-                    </>
-                }
+                    <Route path="*" element={
+                        <><p>
+                            <h1>Error 404</h1>
+                            <Link to="/">Volver al inicio</Link>
+                        </p>
+                        </>
+                    }
 
-                />
+                    />
 
-            </Routes>
+                </Routes>
 
-
+            </AuthProvider>
         </BrowserRouter>
     )
 }
