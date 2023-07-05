@@ -6,7 +6,7 @@ import { Global } from '../../helpers/Global'
 
 export const Sidebar = () => {
     const {auth,counters} = useAuth()
-    console.log(auth)
+    console.log(auth.image)
     console.log(counters)
     return (
         <aside className="layout__aside">
