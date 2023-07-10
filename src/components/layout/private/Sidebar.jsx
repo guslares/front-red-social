@@ -6,8 +6,7 @@ import { Global } from '../../helpers/Global'
 
 export const Sidebar = () => {
     const {auth,counters} = useAuth()
-    console.log(auth.image)
-    console.log(counters)
+
     return (
         <aside className="layout__aside">
 
@@ -21,7 +20,7 @@ export const Sidebar = () => {
 
                     <div className="profile-info__general-info">
                         <div className="general-info__container-avatar">
-                            {auth.image != "default.png" && <img src={Global.url+"user/avatar"+auth.image} className="container-avatar__img" alt="Foto de perfil"/>}
+                            {auth.image != "default.png" && <img src={auth.image.props.src}  className="container-avatar__img" alt="Foto de perfil"/>}
                             {auth.image = "default.png" && <img src={avatar} className="container-avatar__img" alt="Foto de perfil"/>}
                         </div>
 

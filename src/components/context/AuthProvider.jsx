@@ -32,6 +32,7 @@ export const AuthProvider = ({ children }) => {
         const userObj = JSON.parse(user)
         const userId = userObj.id;
 
+
         // Peticion ajax al backend que compruebe el token y que me devuevla todos los datos del usuario
 
         const requestProfile = await fetch(Global.url + "user/profile/" + userId, {
@@ -44,6 +45,7 @@ export const AuthProvider = ({ children }) => {
        
         const dataProfile = await requestProfile.json()
 
+    
         // Petición para los contadores
         const requestCounters = await fetch(Global.url + "user/counters/" + userId, {
             method: "GET",
