@@ -31,7 +31,7 @@ export const Config = () => {
 
         const data = await request.json()
 
-        if (data.status == "success") {
+        if (data.status == "success" && data.userUpdated) {
 
 
             delete data.userUpdated.password
@@ -59,9 +59,9 @@ export const Config = () => {
                 }
             })
             const uploadData = await uploadRequest.json()
-            console.log(uploadData)
-            if(uploadData.status == "success"){
-                
+            
+            if (uploadData.status == "success" && uploadData.user) {
+
                 setSaved("saved")
             }
         }
@@ -110,8 +110,9 @@ export const Config = () => {
 
                         <div className="general-info__container-avatar">
                             {/* MOSTRAR IMAGEN */}
-                            {auth.image != "default.png" && <img src={auth.image.props.src} className="container-avatar__img" alt="Foto de perfil" />}
-                            {auth.image = "default.png" && <img src={avatar} className="container-avatar__img" alt="Foto de perfil" />}
+                            {auth.image != "default.png" && <img src={Global.url + "user/avatar/" + auth.image} className="list-end__img" alt="Foto de perfil" />}
+
+                            {auth.image === "default.png" && <img src={avatar} className="list-end__img" alt="Foto de perfil" />}
                         </div>
                         <br />
                         <input type='file' name='file0' id='file' />

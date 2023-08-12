@@ -5,7 +5,8 @@ import { Global } from '../../helpers/Global'
 
 
 export const Sidebar = () => {
-    const {auth,counters} = useAuth()
+    const { auth, counters } = useAuth()
+
 
     return (
         <aside className="layout__aside">
@@ -20,8 +21,9 @@ export const Sidebar = () => {
 
                     <div className="profile-info__general-info">
                         <div className="general-info__container-avatar">
-                            {auth.image != "default.png" && <img src={auth.image.props.src}  className="container-avatar__img" alt="Foto de perfil"/>}
-                            {auth.image = "default.png" && <img src={avatar} className="container-avatar__img" alt="Foto de perfil"/>}
+                            {auth.image != "default.png" && <img src={Global.url + "user/avatar/" + auth.image} className="list-end__img" alt="Foto de perfil" />}
+
+                            {auth.image == "default.png" && <img src={avatar} className="list-end__img" alt="Foto de perfil" />}
                         </div>
 
                         <div className="general-info__container-names">
@@ -69,10 +71,10 @@ export const Sidebar = () => {
 
                         <div className="form-post__inputs">
                             <label htmlFor="image" className="form-post__label">Sube tu foto</label>
-                            <input type="file" name="image" className="form-post__image"/>
+                            <input type="file" name="image" className="form-post__image" />
                         </div>
 
-                        <input type="submit" value="Enviar" className="form-post__btn-submit" disabled/>
+                        <input type="submit" value="Enviar" className="form-post__btn-submit" disabled />
 
                     </form>
 
