@@ -12,7 +12,7 @@ import { GetProfile } from '../helpers/GetProfile'
 
 export const Following = () => {
     const { auth } = useAuth()
-    console.log(auth)
+
 
     const [users, setUsers] = useState([])
     const [page, setPage] = useState(1)
