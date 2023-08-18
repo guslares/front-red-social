@@ -8,6 +8,7 @@ export const Config = () => {
 
     const { auth, setAuth } = useAuth()
     const [saved, setSaved] = useState("not-saved")
+  
 
     const updateUser = async (e) => {
 
@@ -65,6 +66,7 @@ export const Config = () => {
                 setSaved("saved")
             }
         }
+
 
 
     }

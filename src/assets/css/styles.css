@@ -173,6 +173,10 @@ body {
     cursor: pointer;
 }
 
+.content__button--rigth{
+    float:right
+}
+
 
 .content__button:hover, .content__btn-more-post:hover {
     background-color: var(--color-background-btn-success-hover);
@@ -445,7 +449,7 @@ button{
 }
 
 .alert{
-    width: 50%;
+    width: 65%;
     display: block;
     padding: 1rem;
     margin-bottom: 1rem;
