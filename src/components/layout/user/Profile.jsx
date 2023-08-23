@@ -5,6 +5,7 @@ import { GetProfile } from '../../helpers/GetProfile'
 import { useParams, Link } from 'react-router-dom'
 import { Global } from '../../helpers/Global'
 
+
 export const Profile = () => {
 
     const { auth } = useAuth()
@@ -12,15 +13,19 @@ export const Profile = () => {
     const [counters, setCounters] = useState({})
     const params = useParams()
     const [iFollow, setIFollow] = useState(false)
+    const [publications, setPublications] = useState([])
 
     useEffect(() => {
         getDataUser()
         getCounters()
+        getPublications()
     }, [])
 
     useEffect(() => {
         getDataUser()
         getCounters()
+        getPublications()
+    
     }, [params])
 
     const getDataUser = async () => {
@@ -30,6 +35,7 @@ export const Profile = () => {
     }
 
     const getCounters = async () => {
+       
         const request = await fetch(Global.url + "user/counters/" + params.userId,
             {
                 method: "GET",
@@ -38,10 +44,82 @@ export const Profile = () => {
                     "Authorization": localStorage.getItem("token")
                 }
             })
+
         const data = await request.json()
-        if (data.following) {
+
+
+        if (data.userId) {
             setCounters(data)
+      
         }
+
+
+
+    }
+
+    const unfollow = async (userId) => {
+        // Petición para guardar el unfollow
+        const request = await fetch(Global.url + 'follow/unfollow/' + userId,
+            {
+                method: 'DELETE',
+                headers: {
+                    'Content-Type': 'application/json',
+                    "Authorization": localStorage.getItem('token')
+                }
+            }
+        )
+        // Cuando esté todo correcto
+        const data = await request.json()
+
+        if (data.status == 'success') {
+
+            setIFollow(false)
+        }
+        // Actualizar estado following, agregando el quiar el follow
+
+    }
+
+
+    const follow = async (userId) => {
+        // Petición para guardar el follow
+
+        const request = await fetch(Global.url + 'follow/save',
+            {
+
+                method: "POST",
+                body: JSON.stringify({ followed: userId }),
+                headers: {
+                    'Content-Type': 'application/json; charset=utf-8',
+
+                    'Authorization': localStorage.getItem('token')
+                }
+            })
+        console.log(JSON.stringify({ followed: userId }))
+
+        const data = await request.json()
+
+        // Cuando esté todo correcto
+        if (data.status == 'success') {
+            setIFollow(true)
+        }
+        // Actualizar estado following, agregando el nuevo follow, filtrando los datos para eliminar el antiguo userId
+
+    }
+
+    const getPublications = async (page = 1) => {
+      
+        const request = await fetch(Global.url + "publication/user/" + params.userId + "/" + page, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": localStorage.getItem("token")
+            }
+        })
+        const data = await request.json()
+        if (data.status == "success") {
+            setPublications(data.publications.docs)
+        }
+        
 
     }
 
@@ -64,9 +142,9 @@ export const Profile = () => {
                             <h1>{user.name} {user.surname}</h1>
                             {user._id != auth._id &&
                                 (iFollow ?
-                                    <button className="content__button content__button--rigth ">Dejar de seguir</button>
+                                    <button className="content__button content__button--rigth" onClick={() => { unfollow(user._id) }}>Dejar de seguir</button>
                                     :
-                                    <button className="content__button content__button--rigth">Seguir</button>
+                                    <button className="content__button content__button--rigth" onClick={() => { follow(user._id) }}>Seguir</button>
                                 )}
 
                         </div>
@@ -80,7 +158,7 @@ export const Profile = () => {
                 <div className="profile-info__stats">
 
                     <div className="stats__following">
-                        <Link to={'/social/siguiendo/' + user._id} href="#" className="following__link">
+                        <Link to={'/social/siguiendo/' + user._id} className="following__link">
                             <span className="following__title">Siguiendo</span>
                             <span className="following__number">{counters.following >= 1 ? counters.following : 0}</span>
                         </Link>
@@ -94,7 +172,7 @@ export const Profile = () => {
 
 
                     <div className="stats__following">
-                        <Link to={'/social/perfil/' + user._id} href="#" className="following__link">
+                        <Link to={'/social/perfil/' + user._id} className="following__link">
                             <span className="following__title">Publicaciones</span>
                             <span className="following__number">{counters.publications >= 1 ? counters.publications : 0}</span>
                         </Link>
@@ -106,42 +184,47 @@ export const Profile = () => {
 
 
             <div className="content__posts">
+                {publications.map(publication => {
+                    return (
 
-                <article className="posts__post">
+                        <article key={publication._id} className="posts__post">
 
-                    <div className="post__container">
+                            <div className="post__container">
 
-                        <div className="post__image-user">
-                            <a href="#" className="post__image-link">
-                                <img src={avatar} className="post__user-image" alt="Foto de perfil" />
-                            </a>
-                        </div>
+                                <div className="post__image-user">
+                                    <Link to={'/social/perfil/' + publication.user._id} className="post__image-link">
+                                        {publication.user.image != "default.png" && <img src={Global.url + "user/avatar/" + publication.user.image} className="post__user-image" alt="Foto de perfil" />}
 
-                        <div className="post__body">
+                                        {publication.user.image == "default.png" && <img src={avatar} className="post__user-image" alt="Foto de perfil" />}
+                                    </Link>
+                                </div>
 
-                            <div className="post__user-info">
-                                <a href="#" className="user-info__name">Victor Robles</a>
-                                <span className="user-info__divider"> | </span>
-                                <a href="#" className="user-info__create-date">Hace 1 hora</a>
+                                <div className="post__body">
+
+                                    <div className="post__user-info">
+                                        <a href="#" className="user-info__name">{publication.user.name} {publication.user.surname}</a>
+                                        <span className="user-info__divider"> | </span>
+                                        <a href="#" className="user-info__create-date">{publication.created_at}</a>
+                                    </div>
+
+                                    <h4 className="post__content">{publication.text}</h4>
+
+                                </div>
+
                             </div>
 
-                            <h4 className="post__content">Hola, buenos dias.</h4>
+                            {auth._id == publication.user._id &&
+                                <div className="post__buttons">
 
-                        </div>
+                                    <a href="#" className="post__button">
+                                        <i className="fa-solid fa-trash-can"></i>
+                                    </a>
 
-                    </div>
-
-
-                    <div className="post__buttons">
-
-                        <a href="#" className="post__button">
-                            <i className="fa-solid fa-trash-can"></i>
-                        </a>
-
-                    </div>
-
-                </article>
-
+                                </div>
+                            }
+                        </article>
+                    )
+                })}
 
             </div>
 

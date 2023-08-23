@@ -10,7 +10,7 @@ export const UserList = ({ users, setUsers, following, setFollowing,loading,more
     page,getUsers,setPage }) => {
 
     const { auth } = useAuth()
-    const ufollow = async (userId) => {
+    const unfollow = async (userId) => {
         // Petición para guardar el unfollow
         const request = await fetch(Global.url + 'follow/unfollow/' + userId,
             {
@@ -115,7 +115,7 @@ export const UserList = ({ users, setUsers, following, setFollowing,loading,more
 
                                         {following.includes(user._id) &&
                                             <button className="post__button"
-                                                onClick={() => ufollow(user._id)}>
+                                                onClick={() => unfollow(user._id)}>
                                                 Dejar de seguir
                                             </button>
                                         }
