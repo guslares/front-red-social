@@ -51,7 +51,7 @@ export const UserList = ({ users, setUsers, following, setFollowing,loading,more
                     'Authorization': localStorage.getItem('token')
                 }
             })
-        console.log(JSON.stringify({ followed: userId }))
+      
 
         const data = await request.json()
 
