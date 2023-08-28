@@ -1,5 +1,6 @@
 import React from 'react'
 import avatar from '../../../assets/img/user.png'
+import ReactTimeAgo  from 'react-time-ago'
 
 import useAuth from '../../hooks/useAuth'
 import {  Link } from 'react-router-dom'
@@ -51,7 +52,7 @@ export const PublicationList = ({getPublications,publications,page,setPage,more,
                                     <Link to={'/social/perfil/' + publication.user._id} className="post__image-link">
                                         {publication.user.image != "default.png" && <img src={Global.url + "user/avatar/" + publication.user.image} className="post__user-image" alt="Foto de perfil" />}
 
-                                        {publication.user.image == "default.png" && <img src={avatar} className="post__user-image" alt="Foto de perfil" />}
+                                        {publication.user.image == "default.png" && <img src={avatar} className="post__user-image" alt="Foto de perfil"/>}
                                     </Link>
                                 </div>
 
@@ -60,7 +61,8 @@ export const PublicationList = ({getPublications,publications,page,setPage,more,
                                     <div className="post__user-info">
                                         <a href="#" className="user-info__name">{publication.user.name} {publication.user.surname}</a>
                                         <span className="user-info__divider"> | </span>
-                                        <a href="#" className="user-info__create-date">{publication.created_at}</a>
+                                        <a href="#" className="user-info__create-date">{<ReactTimeAgo date={Date.parse(publication.created_at)} locale='es-AR'/> }</a>
+                                        
                                     </div>
 
                                     <h4 className="post__content">{publication.text}</h4>
